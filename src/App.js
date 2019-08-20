@@ -16,16 +16,23 @@ import './App.css';
 
 function App() {
 
-  const [userInput, setUserInput] = useState("")
-  
+  const [userInput, setUserInput] = useState("a")
+
+  function logSHIT(algo){
+    console.log(algo)
+  }
+
   return (
     <div className="App">
       <header className="App-header">
         <p> Geobuf / GeoJson converter </p>
-        <textarea className="text-input">
+        <textarea className="text-input" onChange={setUserInput}>
           Enter a GeoJson here!
         </textarea>
         <input type="submit" value="convert !" className="btn-input"/>
+        <button onClick={() => logSHIT(userInput)}>
+          Click me
+        </button>
       </header>
     </div>
   );
