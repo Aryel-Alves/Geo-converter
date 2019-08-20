@@ -30,14 +30,13 @@ function App() {
   }
 
   function handleSubmit(event) {
-    var buffer = geobuf.decode(new Pbf(userInput));
-    console.log(buffer);
-    let headers = {
-      headers: {
-        'Accept': "application/octet-stream"
-      }
-    }
-    axios.get('http://ggt-des.ibge.gov.br/api/bcim/aldeias-indigenas/623', headers)
+   
+    axios({
+      method: 'get',
+      url: 'http://ggt-des.ibge.gov.br/api/bcim/aldeias-indigenas/623',
+      responseType: 'arraybuffer',
+      headers: {'Accept': 'application/octet-stream'}
+    })
     .then(res => {
       console.log(res.data)
       let parsedRes = geobuf.decode(new Pbf(res.data))
