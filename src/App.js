@@ -20,6 +20,7 @@ import './App.css';
 function App() {
 
   const [userInput, setUserInput] = useState("")
+  const [ parsedResponse, setParsedResponse ] = useState("")
 
   /*function logSHIT(algo){
     console.log(algo)
@@ -30,18 +31,19 @@ function App() {
   }
 
   function handleSubmit(event) {
-   
-    axios({
-      method: 'get',
-      url: 'http://ggt-des.ibge.gov.br/api/bcim/aldeias-indigenas/623',
+
+    let requestConfig = {
       responseType: 'arraybuffer',
       headers: {'Accept': 'application/octet-stream'}
+    }
+
+    axios.get(userInput, requestConfig)
+    .then( response => {
+      let geoJson = geobuf.decode(new Pbf(response.data))
+      setParsedResponse(geoJson)
     })
-    .then(res => {
-      console.log(res.data)
-      let parsedRes = geobuf.decode(new Pbf(res.data))
-      console.log(parsedRes)
-    })
+
+    
     event.preventDefault();
   }
 
@@ -49,14 +51,27 @@ function App() {
     <div className="App">
       <header className="App-header">
         <p> Geobuf / GeoJson converter </p>
-        <textarea className="text-input" onChange={handleChange}/>
+      </header>
+      <div>
+        <label>
+          GeoBuf Url:
+          <input type="text" className="text-input" onChange={handleChange}/>
+        </label>
+
         <input 
           type="submit" 
           value="convert !" 
           className="btn-input" 
           onClick={handleSubmit}
         />
-      </header>
+      </div>
+      <div id="response-container">
+        <div className="parsed-container">
+          GeoJson
+          <div>{JSON.stringify(parsedResponse)}</div>
+        </div>
+      </div>
+      
     </div>
   );
 }
